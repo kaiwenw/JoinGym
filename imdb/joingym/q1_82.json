@@ -1,0 +1,41 @@
+{
+ "name": "1 82",
+ "relations": [
+  {"name": "ct", "aliastable": "company_type", "basetable": "company_type", "cardinality": 2, "unfilteredCardinality": 4},
+  {"name": "it", "aliastable": "info_type", "basetable": "info_type", "cardinality": 19, "unfilteredCardinality": 113},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 15262, "unfilteredCardinality": 2609129},
+  {"name": "mi_idx", "aliastable": "movie_info_idx", "basetable": "movie_info_idx", "cardinality": 806365, "unfilteredCardinality": 1380035},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 208, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["ct", "mc"]},
+  {"relations": ["t", "mc"]},
+  {"relations": ["t", "mi_idx"]},
+  {"relations": ["mc", "mi_idx"]},
+  {"relations": ["it", "mi_idx"]}
+ ],
+ "sizes": [
+  {"relations": ["ct", "mc"], "cardinality": 13},
+  {"relations": ["it", "mi_idx"], "cardinality": 313486},
+  {"relations": ["mc", "mi_idx"], "cardinality": 19804},
+  {"relations": ["mc", "t"], "cardinality": 1},
+  {"relations": ["mi_idx", "t"], "cardinality": 86},
+  {"relations": ["ct", "mc", "mi_idx"], "cardinality": 22},
+  {"relations": ["ct", "mc", "t"], "cardinality": 0},
+  {"relations": ["it", "mc", "mi_idx"], "cardinality": 7824},
+  {"relations": ["it", "mi_idx", "t"], "cardinality": 32},
+  {"relations": ["mc", "mi_idx", "t"], "cardinality": 1},
+  {"relations": ["ct", "it", "mc", "mi_idx"], "cardinality": 10},
+  {"relations": ["ct", "mc", "mi_idx", "t"], "cardinality": 0},
+  {"relations": ["it", "mc", "mi_idx", "t"], "cardinality": 0},
+  {"relations": ["ct", "it", "mc", "mi_idx", "t"], "cardinality": 0}
+ ],
+ "query": "SELECT MIN(mc.note) AS production_note, MIN(t.title) AS movie_title, MIN(t.production_year) AS movie_year FROM company_type AS ct, info_type AS it, movie_companies AS mc, movie_info_idx AS mi_idx, title AS t WHERE ct.id = mc.company_type_id AND t.id = mc.movie_id AND t.id = mi_idx.movie_id AND mc.movie_id = mi_idx.movie_id AND it.id = mi_idx.info_type_id AND it.info in ('gross','LD original title','birth name','LD spaciality','LD year','birth date','tech info','keywords','pictorial','quotes','LD video standard','LD disc size','LD release country','LD quality program','LD frequency response','votes','LD number of sides','LD video artifacts','other literature') AND mi_idx.info > '2.0' AND ct.kind in ('production companies','miscellaneous companies') AND (t.title like '%chair%' OR t.title like '%comedy%' OR t.title like '%mask%' OR t.title like '%code%' OR t.title like '%darkness%') AND t.production_year > 2004 AND (mc.note like '%Sweden%' OR mc.note like '%Russia%')",
+ "join columns": ["t.id", "mi_idx.movie_id", "mc.movie_id", "it.id", "mc.company_type_id", "ct.id", "mi_idx.info_type_id"],
+ "unary columns": ["t.production_year", "mi_idx.info", "mc.note", "it.info", "ct.kind", "t.title"],
+ "join expressions": [{"left": "ct.id", "right": "mc.company_type_id"}, {"left": "t.id", "right": "mc.movie_id"}, {"left": "t.id", "right": "mi_idx.movie_id"}, {"left": "mc.movie_id", "right": "mi_idx.movie_id"}, {"left": "it.id", "right": "mi_idx.info_type_id"}],
+ "left deep tree min cost": "1",
+ "left deep tree min order": "((((mc join t) join ct) join it) join mi_idx)",
+ "bushy deep tree min cost": "1",
+ "bushy deep tree min order": "((((mc join t) join ct) join it) join mi_idx)"
+}

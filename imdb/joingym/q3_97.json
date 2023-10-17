@@ -1,0 +1,33 @@
+{
+ "name": "3 97",
+ "relations": [
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 59, "unfilteredCardinality": 134170},
+  {"name": "mi", "aliastable": "movie_info", "basetable": "movie_info", "cardinality": 44629, "unfilteredCardinality": 14835720},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 1330735, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "mi"]},
+  {"relations": ["k", "mk"]}
+ ],
+ "sizes": [
+  {"relations": ["k", "mk"], "cardinality": 3322},
+  {"relations": ["mi", "mk"], "cardinality": 154619},
+  {"relations": ["mi", "t"], "cardinality": 23739},
+  {"relations": ["mk", "t"], "cardinality": 2382596},
+  {"relations": ["k", "mi", "mk"], "cardinality": 187},
+  {"relations": ["k", "mk", "t"], "cardinality": 1793},
+  {"relations": ["mi", "mk", "t"], "cardinality": 94178},
+  {"relations": ["k", "mi", "mk", "t"], "cardinality": 130}
+ ],
+ "query": "SELECT MIN(t.title) AS movie_title FROM keyword AS k, movie_info AS mi, movie_keyword AS mk, title AS t WHERE t.id = mi.movie_id AND t.id = mk.movie_id AND mk.movie_id = mi.movie_id AND k.id = mk.keyword_id AND mi.info in ('Kyrgyz','Tlingit','Greenlandic','Inuktitut','Russian','Hebrew','Polish','Mongolian','Portuguese') AND t.production_year > 1991 AND t.production_year < 2011 AND t.title not like '%darkness%' AND t.title not like '%car%' AND (k.keyword like '%secrets%' OR k.keyword like '%assassin%')",
+ "join columns": ["mi.movie_id", "t.id", "mk.keyword_id", "k.id", "mk.movie_id"],
+ "unary columns": ["mi.info", "t.production_year", "k.keyword", "t.title"],
+ "join expressions": [{"left": "t.id", "right": "mi.movie_id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.movie_id", "right": "mi.movie_id"}, {"left": "k.id", "right": "mk.keyword_id"}],
+ "left deep tree min cost": "3639",
+ "left deep tree min order": "(((k join mk) join mi) join t)",
+ "bushy deep tree min cost": "3639",
+ "bushy deep tree min order": "(((k join mk) join mi) join t)"
+}

@@ -1,0 +1,41 @@
+{
+ "name": "5 45",
+ "relations": [
+  {"name": "ct", "aliastable": "company_type", "basetable": "company_type", "cardinality": 2, "unfilteredCardinality": 4},
+  {"name": "it", "aliastable": "info_type", "basetable": "info_type", "cardinality": 13, "unfilteredCardinality": 113},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 2609129, "unfilteredCardinality": 2609129},
+  {"name": "mi", "aliastable": "movie_info", "basetable": "movie_info", "cardinality": 4170, "unfilteredCardinality": 14835720},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 601, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi"]},
+  {"relations": ["t", "mc"]},
+  {"relations": ["mc", "mi"]},
+  {"relations": ["ct", "mc"]},
+  {"relations": ["it", "mi"]}
+ ],
+ "sizes": [
+  {"relations": ["ct", "mc"], "cardinality": 0},
+  {"relations": ["it", "mi"], "cardinality": 0},
+  {"relations": ["mc", "mi"], "cardinality": 6768},
+  {"relations": ["mc", "t"], "cardinality": 779},
+  {"relations": ["mi", "t"], "cardinality": 3},
+  {"relations": ["ct", "mc", "mi"], "cardinality": 0},
+  {"relations": ["ct", "mc", "t"], "cardinality": 0},
+  {"relations": ["it", "mc", "mi"], "cardinality": 0},
+  {"relations": ["it", "mi", "t"], "cardinality": 0},
+  {"relations": ["mc", "mi", "t"], "cardinality": 14},
+  {"relations": ["ct", "it", "mc", "mi"], "cardinality": 0},
+  {"relations": ["ct", "mc", "mi", "t"], "cardinality": 0},
+  {"relations": ["it", "mc", "mi", "t"], "cardinality": 0},
+  {"relations": ["ct", "it", "mc", "mi", "t"], "cardinality": 0}
+ ],
+ "query": "SELECT MIN(t.title) AS typical_european_movie FROM company_type AS ct, info_type AS it, movie_companies AS mc, movie_info AS mi, title AS t WHERE t.id = mi.movie_id AND t.id = mc.movie_id AND mc.movie_id = mi.movie_id AND ct.id = mc.company_type_id AND it.id = mi.info_type_id AND mi.info in ('Dari','Estonian','Romanian','Slovak') AND (t.title like '%letter%' OR t.title like '%picture%' OR t.title like '%star%' OR t.title like '%crown%' OR t.title like '%thunder%') AND t.production_year > 1995 AND t.production_year < 2007 AND ct.kind in ('miscellaneous companies','special effects companies') AND it.info in ('LD audio noise','pictorial','opening weekend','other literature','studios','biographical movies','color info','sound mix','LD subtitles','spouse','budget','essays','runtimes')",
+ "join columns": ["mi.movie_id", "t.id", "mi.info_type_id", "mc.movie_id", "it.id", "mc.company_type_id", "ct.id"],
+ "unary columns": ["t.production_year", "it.info", "ct.kind", "t.title", "mi.info"],
+ "join expressions": [{"left": "t.id", "right": "mi.movie_id"}, {"left": "t.id", "right": "mc.movie_id"}, {"left": "mc.movie_id", "right": "mi.movie_id"}, {"left": "ct.id", "right": "mc.company_type_id"}, {"left": "it.id", "right": "mi.info_type_id"}],
+ "left deep tree min cost": "0",
+ "left deep tree min order": "((((ct join mc) join it) join mi) join t)",
+ "bushy deep tree min cost": "0",
+ "bushy deep tree min order": "((((ct join mc) join it) join mi) join t)"
+}

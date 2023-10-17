@@ -1,0 +1,45 @@
+{
+ "name": "32 24",
+ "relations": [
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 695, "unfilteredCardinality": 134170},
+  {"name": "lt", "aliastable": "link_type", "basetable": "link_type", "cardinality": 4, "unfilteredCardinality": 18},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "ml", "aliastable": "movie_link", "basetable": "movie_link", "cardinality": 29997, "unfilteredCardinality": 29997},
+  {"name": "t1", "aliastable": "title", "basetable": "title", "cardinality": 4807, "unfilteredCardinality": 2528312},
+  {"name": "t2", "aliastable": "title2", "basetable": "title", "cardinality": 141703, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["mk", "k"]},
+  {"relations": ["t1", "mk"]},
+  {"relations": ["ml", "t1"]},
+  {"relations": ["ml", "t2"]},
+  {"relations": ["lt", "ml"]},
+  {"relations": ["mk", "t1"]}
+ ],
+ "sizes": [
+  {"relations": ["k", "mk"], "cardinality": 38228},
+  {"relations": ["lt", "ml"], "cardinality": 6483},
+  {"relations": ["mk", "t1"], "cardinality": 12663},
+  {"relations": ["ml", "t1"], "cardinality": 71},
+  {"relations": ["ml", "t2"], "cardinality": 1122},
+  {"relations": ["k", "mk", "t1"], "cardinality": 83},
+  {"relations": ["lt", "ml", "t1"], "cardinality": 1},
+  {"relations": ["lt", "ml", "t2"], "cardinality": 530},
+  {"relations": ["mk", "ml", "t1"], "cardinality": 9},
+  {"relations": ["ml", "t1", "t2"], "cardinality": 2},
+  {"relations": ["k", "mk", "ml", "t1"], "cardinality": 0},
+  {"relations": ["lt", "mk", "ml", "t1"], "cardinality": 0},
+  {"relations": ["lt", "ml", "t1", "t2"], "cardinality": 0},
+  {"relations": ["mk", "ml", "t1", "t2"], "cardinality": 0},
+  {"relations": ["k", "lt", "mk", "ml", "t1"], "cardinality": 0},
+  {"relations": ["k", "mk", "ml", "t1", "t2"], "cardinality": 0},
+  {"relations": ["lt", "mk", "ml", "t1", "t2"], "cardinality": 0},
+  {"relations": ["k", "lt", "mk", "ml", "t1", "t2"], "cardinality": 0}
+ ],
+ "query": "SELECT MIN(lt.link) AS link_type, MIN(t1.title) AS first_movie, MIN(t2.title) AS second_movie FROM keyword AS k, link_type AS lt, movie_keyword AS mk, movie_link AS ml, title AS t1, title AS t2 WHERE mk.keyword_id = k.id AND t1.id = mk.movie_id AND ml.movie_id = t1.id AND ml.linked_movie_id = t2.id AND lt.id = ml.link_type_id AND mk.movie_id = t1.id AND (k.keyword like '%justice%' OR k.keyword like '%betraying%' OR k.keyword like '%police%' OR k.keyword like '%magic%') AND t2.production_year > 2009 AND t2.production_year < 2011 AND lt.link in ('similar to','spoofed in','remade as','referenced in') AND (t1.title like '%key%' OR t1.title like '%journey%' OR t1.title like '%potion%' OR t1.title like '%house%')",
+ "join columns": ["mk.keyword_id", "lt.id", "ml.linked_movie_id", "mk.movie_id", "ml.link_type_id", "k.id", "t1.id", "ml.movie_id", "t2.id"],
+ "unary columns": ["t1.title", "lt.link", "k.keyword", "t2.production_year"],
+ "join expressions": [{"left": "mk.keyword_id", "right": "k.id"}, {"left": "t1.id", "right": "mk.movie_id"}, {"left": "ml.movie_id", "right": "t1.id"}, {"left": "ml.linked_movie_id", "right": "t2.id"}, {"left": "lt.id", "right": "ml.link_type_id"}, {"left": "mk.movie_id", "right": "t1.id"}],
+ "left deep tree min cost": "72",
+ "bushy deep tree min cost": "72"
+}

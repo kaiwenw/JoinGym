@@ -1,0 +1,41 @@
+{
+ "name": "6 42",
+ "relations": [
+  {"name": "ci", "aliastable": "cast_info", "basetable": "cast_info", "cardinality": 36244344, "unfilteredCardinality": 36244344},
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 1013, "unfilteredCardinality": 134170},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "n", "aliastable": "name", "basetable": "name", "cardinality": 1345845, "unfilteredCardinality": 4167491},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 103, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["k", "mk"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["t", "ci"]},
+  {"relations": ["ci", "mk"]},
+  {"relations": ["n", "ci"]}
+ ],
+ "sizes": [
+  {"relations": ["ci", "mk"], "cardinality": 215765477},
+  {"relations": ["ci", "n"], "cardinality": 13734317},
+  {"relations": ["ci", "t"], "cardinality": 1242},
+  {"relations": ["k", "mk"], "cardinality": 34561},
+  {"relations": ["mk", "t"], "cardinality": 164},
+  {"relations": ["ci", "k", "mk"], "cardinality": 1482633},
+  {"relations": ["ci", "mk", "n"], "cardinality": 86105318},
+  {"relations": ["ci", "mk", "t"], "cardinality": 3382},
+  {"relations": ["ci", "n", "t"], "cardinality": 513},
+  {"relations": ["k", "mk", "t"], "cardinality": 1},
+  {"relations": ["ci", "k", "mk", "n"], "cardinality": 621029},
+  {"relations": ["ci", "k", "mk", "t"], "cardinality": 16},
+  {"relations": ["ci", "mk", "n", "t"], "cardinality": 1581},
+  {"relations": ["ci", "k", "mk", "n", "t"], "cardinality": 10}
+ ],
+ "query": "SELECT MIN(k.keyword) AS movie_keyword, MIN(n.name) AS actor_name, MIN(t.title) AS marvel_movie FROM cast_info AS ci, keyword AS k, movie_keyword AS mk, name AS n, title AS t WHERE k.id = mk.keyword_id AND t.id = mk.movie_id AND t.id = ci.movie_id AND ci.movie_id = mk.movie_id AND n.id = ci.person_id AND n.gender in ('m') AND (n.name like '%e%' OR n.name like '%Y%' OR n.name like '%x%' OR n.name like '%B%' OR n.name like '%P%') AND (t.title like '%shoe%') AND (k.keyword like '%thriller%' OR k.keyword like '%music%' OR k.keyword like '%escape%' OR k.keyword like '%alien%' OR k.keyword like '%future%')",
+ "join columns": ["n.id", "ci.person_id", "t.id", "mk.keyword_id", "k.id", "mk.movie_id", "ci.movie_id"],
+ "unary columns": ["n.name", "n.gender", "k.keyword", "t.title"],
+ "join expressions": [{"left": "k.id", "right": "mk.keyword_id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "t.id", "right": "ci.movie_id"}, {"left": "ci.movie_id", "right": "mk.movie_id"}, {"left": "n.id", "right": "ci.person_id"}],
+ "left deep tree min cost": "191",
+ "left deep tree min order": "((((mk join t) join k) join ci) join n)",
+ "bushy deep tree min cost": "191",
+ "bushy deep tree min order": "((((mk join t) join k) join ci) join n)"
+}

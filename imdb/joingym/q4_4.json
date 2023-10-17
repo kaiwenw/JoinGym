@@ -1,0 +1,41 @@
+{
+ "name": "4 4",
+ "relations": [
+  {"name": "it", "aliastable": "info_type", "basetable": "info_type", "cardinality": 16, "unfilteredCardinality": 113},
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 52, "unfilteredCardinality": 134170},
+  {"name": "mi_idx", "aliastable": "movie_info_idx", "basetable": "movie_info_idx", "cardinality": 806365, "unfilteredCardinality": 1380035},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 29085, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi_idx"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "mi_idx"]},
+  {"relations": ["k", "mk"]},
+  {"relations": ["it", "mi_idx"]}
+ ],
+ "sizes": [
+  {"relations": ["it", "mi_idx"], "cardinality": 0},
+  {"relations": ["k", "mk"], "cardinality": 8522},
+  {"relations": ["mi_idx", "mk"], "cardinality": 6053379},
+  {"relations": ["mi_idx", "t"], "cardinality": 9866},
+  {"relations": ["mk", "t"], "cardinality": 49549},
+  {"relations": ["it", "mi_idx", "mk"], "cardinality": 0},
+  {"relations": ["it", "mi_idx", "t"], "cardinality": 0},
+  {"relations": ["k", "mi_idx", "mk"], "cardinality": 12172},
+  {"relations": ["k", "mk", "t"], "cardinality": 63},
+  {"relations": ["mi_idx", "mk", "t"], "cardinality": 65554},
+  {"relations": ["it", "k", "mi_idx", "mk"], "cardinality": 0},
+  {"relations": ["it", "mi_idx", "mk", "t"], "cardinality": 0},
+  {"relations": ["k", "mi_idx", "mk", "t"], "cardinality": 93},
+  {"relations": ["it", "k", "mi_idx", "mk", "t"], "cardinality": 0}
+ ],
+ "query": "SELECT MIN(mi_idx.info) AS rating, MIN(t.title) AS movie_title FROM info_type AS it, keyword AS k, movie_info_idx AS mi_idx, movie_keyword AS mk, title AS t WHERE t.id = mi_idx.movie_id AND t.id = mk.movie_id AND mk.movie_id = mi_idx.movie_id AND k.id = mk.keyword_id AND it.id = mi_idx.info_type_id AND (k.keyword like '%revenge%' OR k.keyword like '%rebellion%') AND (t.title like '%ring%' OR t.title like '%legend%' OR t.title like '%hat%' OR t.title like '%knife%') AND mi_idx.info > '2.0' AND it.info in ('keywords','LD close captions-teletext-ld-g','trade mark','LD disc size','LD analog right','LD contrast','locations','printed media reviews','sound mix','LD number of sides','LD category','salary history','LD number of chapter stops','LD language','birth notes','production process protocol')",
+ "join columns": ["t.id", "mi_idx.movie_id", "mk.keyword_id", "k.id", "mk.movie_id", "it.id", "mi_idx.info_type_id"],
+ "unary columns": ["mi_idx.info", "k.keyword", "it.info", "t.title"],
+ "join expressions": [{"left": "t.id", "right": "mi_idx.movie_id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.movie_id", "right": "mi_idx.movie_id"}, {"left": "k.id", "right": "mk.keyword_id"}, {"left": "it.id", "right": "mi_idx.info_type_id"}],
+ "left deep tree min cost": "0",
+ "left deep tree min order": "((((it join mi_idx) join k) join mk) join t)",
+ "bushy deep tree min cost": "0",
+ "bushy deep tree min order": "((((it join mi_idx) join k) join mk) join t)"
+}

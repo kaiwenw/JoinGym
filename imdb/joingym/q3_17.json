@@ -1,0 +1,33 @@
+{
+ "name": "3 17",
+ "relations": [
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 608, "unfilteredCardinality": 134170},
+  {"name": "mi", "aliastable": "movie_info", "basetable": "movie_info", "cardinality": 18178, "unfilteredCardinality": 14835720},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 4, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "mi"]},
+  {"relations": ["k", "mk"]}
+ ],
+ "sizes": [
+  {"relations": ["k", "mk"], "cardinality": 23701},
+  {"relations": ["mi", "mk"], "cardinality": 90101},
+  {"relations": ["mi", "t"], "cardinality": 0},
+  {"relations": ["mk", "t"], "cardinality": 0},
+  {"relations": ["k", "mi", "mk"], "cardinality": 786},
+  {"relations": ["k", "mk", "t"], "cardinality": 0},
+  {"relations": ["mi", "mk", "t"], "cardinality": 0},
+  {"relations": ["k", "mi", "mk", "t"], "cardinality": 0}
+ ],
+ "query": "SELECT MIN(t.title) AS movie_title FROM keyword AS k, movie_info AS mi, movie_keyword AS mk, title AS t WHERE t.id = mi.movie_id AND t.id = mk.movie_id AND mk.movie_id = mi.movie_id AND k.id = mk.keyword_id AND (k.keyword like '%family%' OR k.keyword like '%space%') AND (t.title like '%adventure%' OR t.title like '%picture%') AND t.production_year > 2012 AND mi.info in ('Danish','Ladino','Chechen','Afrikaans','Brazilian Sign Language','Gujarati','Mandarin','Tatar')",
+ "join columns": ["mi.movie_id", "t.id", "mk.keyword_id", "k.id", "mk.movie_id"],
+ "unary columns": ["t.production_year", "mi.info", "k.keyword", "t.title"],
+ "join expressions": [{"left": "t.id", "right": "mi.movie_id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.movie_id", "right": "mi.movie_id"}, {"left": "k.id", "right": "mk.keyword_id"}],
+ "left deep tree min cost": "0",
+ "left deep tree min order": "(((mi join t) join k) join mk)",
+ "bushy deep tree min cost": "0",
+ "bushy deep tree min order": "(((mi join t) join k) join mk)"
+}

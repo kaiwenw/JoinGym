@@ -1,0 +1,41 @@
+{
+ "name": "2 63",
+ "relations": [
+  {"name": "cn", "aliastable": "company_name", "basetable": "company_name", "cardinality": 211073, "unfilteredCardinality": 234997},
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 926, "unfilteredCardinality": 134170},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 22251, "unfilteredCardinality": 2609129},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 11985, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["cn", "mc"]},
+  {"relations": ["mc", "t"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "k"]},
+  {"relations": ["mc", "mk"]}
+ ],
+ "sizes": [
+  {"relations": ["cn", "mc"], "cardinality": 22059},
+  {"relations": ["k", "mk"], "cardinality": 52000},
+  {"relations": ["mc", "mk"], "cardinality": 916002},
+  {"relations": ["mc", "t"], "cardinality": 76},
+  {"relations": ["mk", "t"], "cardinality": 17393},
+  {"relations": ["cn", "mc", "mk"], "cardinality": 911857},
+  {"relations": ["cn", "mc", "t"], "cardinality": 76},
+  {"relations": ["k", "mc", "mk"], "cardinality": 16594},
+  {"relations": ["k", "mk", "t"], "cardinality": 142},
+  {"relations": ["mc", "mk", "t"], "cardinality": 2346},
+  {"relations": ["cn", "k", "mc", "mk"], "cardinality": 16517},
+  {"relations": ["cn", "mc", "mk", "t"], "cardinality": 2346},
+  {"relations": ["k", "mc", "mk", "t"], "cardinality": 70},
+  {"relations": ["cn", "k", "mc", "mk", "t"], "cardinality": 70}
+ ],
+ "query": "SELECT MIN(t.title) AS movie_title FROM company_name AS cn, keyword AS k, movie_companies AS mc, movie_keyword AS mk, title AS t WHERE cn.id = mc.company_id AND mc.movie_id = t.id AND t.id = mk.movie_id AND mk.keyword_id = k.id AND mc.movie_id = mk.movie_id AND (k.keyword like '%betray%' OR k.keyword like '%horror%' OR k.keyword like '%prison%' OR k.keyword like '%death%') AND (t.title like '%spoon%' OR t.title like '%ring%' OR t.title like '%island%' OR t.title like '%crown%' OR t.title like '%nightmare%') AND (mc.note like '%Denmark%' OR mc.note like '%Russia%' OR mc.note like '%Sweden%') AND cn.country_code not in ('ua','bo','ye','pa','va','cy','ba')",
+ "join columns": ["cn.id", "t.id", "mk.keyword_id", "mc.movie_id", "mc.company_id", "mk.movie_id", "k.id"],
+ "unary columns": ["mc.note", "cn.country_code", "k.keyword", "t.title"],
+ "join expressions": [{"left": "cn.id", "right": "mc.company_id"}, {"left": "mc.movie_id", "right": "t.id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.keyword_id", "right": "k.id"}, {"left": "mc.movie_id", "right": "mk.movie_id"}],
+ "left deep tree min cost": "2562",
+ "left deep tree min order": "((((mc join t) join mk) join k) join cn)",
+ "bushy deep tree min cost": "2562",
+ "bushy deep tree min order": "((((mc join t) join mk) join k) join cn)"
+}

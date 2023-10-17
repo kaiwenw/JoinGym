@@ -1,0 +1,41 @@
+{
+ "name": "2 80",
+ "relations": [
+  {"name": "cn", "aliastable": "company_name", "basetable": "company_name", "cardinality": 128, "unfilteredCardinality": 234997},
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 90, "unfilteredCardinality": 134170},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 11221, "unfilteredCardinality": 2609129},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 16044, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["cn", "mc"]},
+  {"relations": ["mc", "t"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "k"]},
+  {"relations": ["mc", "mk"]}
+ ],
+ "sizes": [
+  {"relations": ["cn", "mc"], "cardinality": 18},
+  {"relations": ["k", "mk"], "cardinality": 5565},
+  {"relations": ["mc", "mk"], "cardinality": 167608},
+  {"relations": ["mc", "t"], "cardinality": 73},
+  {"relations": ["mk", "t"], "cardinality": 35008},
+  {"relations": ["cn", "mc", "mk"], "cardinality": 750},
+  {"relations": ["cn", "mc", "t"], "cardinality": 0},
+  {"relations": ["k", "mc", "mk"], "cardinality": 241},
+  {"relations": ["k", "mk", "t"], "cardinality": 24},
+  {"relations": ["mc", "mk", "t"], "cardinality": 2267},
+  {"relations": ["cn", "k", "mc", "mk"], "cardinality": 1},
+  {"relations": ["cn", "mc", "mk", "t"], "cardinality": 0},
+  {"relations": ["k", "mc", "mk", "t"], "cardinality": 2},
+  {"relations": ["cn", "k", "mc", "mk", "t"], "cardinality": 0}
+ ],
+ "query": "SELECT MIN(t.title) AS movie_title FROM company_name AS cn, keyword AS k, movie_companies AS mc, movie_keyword AS mk, title AS t WHERE cn.id = mc.company_id AND mc.movie_id = t.id AND t.id = mk.movie_id AND mk.keyword_id = k.id AND mc.movie_id = mk.movie_id AND (mc.note like '%India%' OR mc.note like '%Denmark%') AND (k.keyword like '%betray%' OR k.keyword like '%fantasy%') AND (t.title like '%day%' OR t.title like '%drama%' OR t.title like '%pen%' OR t.title like '%shield%') AND (cn.name like '%Universal Pictures%' OR cn.name like '%Focus Features%' OR cn.name like '%Legendary%')",
+ "join columns": ["cn.id", "t.id", "mk.keyword_id", "mc.movie_id", "mc.company_id", "mk.movie_id", "k.id"],
+ "unary columns": ["cn.name", "k.keyword", "mc.note", "t.title"],
+ "join expressions": [{"left": "cn.id", "right": "mc.company_id"}, {"left": "mc.movie_id", "right": "t.id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.keyword_id", "right": "k.id"}, {"left": "mc.movie_id", "right": "mk.movie_id"}],
+ "left deep tree min cost": "18",
+ "left deep tree min order": "((((cn join mc) join t) join k) join mk)",
+ "bushy deep tree min cost": "18",
+ "bushy deep tree min order": "((((cn join mc) join t) join k) join mk)"
+}

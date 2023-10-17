@@ -1,0 +1,41 @@
+{
+ "name": "2 15",
+ "relations": [
+  {"name": "cn", "aliastable": "company_name", "basetable": "company_name", "cardinality": 234997, "unfilteredCardinality": 234997},
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 383, "unfilteredCardinality": 134170},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 2609129, "unfilteredCardinality": 2609129},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 784926, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["cn", "mc"]},
+  {"relations": ["mc", "t"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "k"]},
+  {"relations": ["mc", "mk"]}
+ ],
+ "sizes": [
+  {"relations": ["cn", "mc"], "cardinality": 2609129},
+  {"relations": ["k", "mk"], "cardinality": 12780},
+  {"relations": ["mc", "mk"], "cardinality": 34863638},
+  {"relations": ["mc", "t"], "cardinality": 630339},
+  {"relations": ["mk", "t"], "cardinality": 886170},
+  {"relations": ["cn", "mc", "mk"], "cardinality": 34863638},
+  {"relations": ["cn", "mc", "t"], "cardinality": 630339},
+  {"relations": ["k", "mc", "mk"], "cardinality": 117880},
+  {"relations": ["k", "mk", "t"], "cardinality": 2933},
+  {"relations": ["mc", "mk", "t"], "cardinality": 7258276},
+  {"relations": ["cn", "k", "mc", "mk"], "cardinality": 117880},
+  {"relations": ["cn", "mc", "mk", "t"], "cardinality": 7258276},
+  {"relations": ["k", "mc", "mk", "t"], "cardinality": 24271},
+  {"relations": ["cn", "k", "mc", "mk", "t"], "cardinality": 24271}
+ ],
+ "query": "SELECT MIN(t.title) AS movie_title FROM company_name AS cn, keyword AS k, movie_companies AS mc, movie_keyword AS mk, title AS t WHERE cn.id = mc.company_id AND mc.movie_id = t.id AND t.id = mk.movie_id AND mk.keyword_id = k.id AND mc.movie_id = mk.movie_id AND (k.keyword like '%horror%' OR k.keyword like '%secret%') AND t.production_year > 2007",
+ "join columns": ["cn.id", "t.id", "mk.keyword_id", "mc.movie_id", "mc.company_id", "mk.movie_id", "k.id"],
+ "unary columns": ["t.production_year", "k.keyword"],
+ "join expressions": [{"left": "cn.id", "right": "mc.company_id"}, {"left": "mc.movie_id", "right": "t.id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.keyword_id", "right": "k.id"}, {"left": "mc.movie_id", "right": "mk.movie_id"}],
+ "left deep tree min cost": "64255",
+ "left deep tree min order": "((((k join mk) join t) join mc) join cn)",
+ "bushy deep tree min cost": "64255",
+ "bushy deep tree min order": "((((k join mk) join t) join mc) join cn)"
+}

@@ -1,0 +1,41 @@
+{
+ "name": "4 5",
+ "relations": [
+  {"name": "it", "aliastable": "info_type", "basetable": "info_type", "cardinality": 4, "unfilteredCardinality": 113},
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 134170, "unfilteredCardinality": 134170},
+  {"name": "mi_idx", "aliastable": "movie_info_idx", "basetable": "movie_info_idx", "cardinality": 994355, "unfilteredCardinality": 1380035},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 2528312, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi_idx"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "mi_idx"]},
+  {"relations": ["k", "mk"]},
+  {"relations": ["it", "mi_idx"]}
+ ],
+ "sizes": [
+  {"relations": ["it", "mi_idx"], "cardinality": 0},
+  {"relations": ["k", "mk"], "cardinality": 4523930},
+  {"relations": ["mi_idx", "mk"], "cardinality": 7404058},
+  {"relations": ["mi_idx", "t"], "cardinality": 994355},
+  {"relations": ["mk", "t"], "cardinality": 4523930},
+  {"relations": ["it", "mi_idx", "mk"], "cardinality": 0},
+  {"relations": ["it", "mi_idx", "t"], "cardinality": 0},
+  {"relations": ["k", "mi_idx", "mk"], "cardinality": 7404058},
+  {"relations": ["k", "mk", "t"], "cardinality": 4523930},
+  {"relations": ["mi_idx", "mk", "t"], "cardinality": 7404058},
+  {"relations": ["it", "k", "mi_idx", "mk"], "cardinality": 0},
+  {"relations": ["it", "mi_idx", "mk", "t"], "cardinality": 0},
+  {"relations": ["k", "mi_idx", "mk", "t"], "cardinality": 7404058},
+  {"relations": ["it", "k", "mi_idx", "mk", "t"], "cardinality": 0}
+ ],
+ "query": "SELECT MIN(mi_idx.info) AS rating, MIN(t.title) AS movie_title FROM info_type AS it, keyword AS k, movie_info_idx AS mi_idx, movie_keyword AS mk, title AS t WHERE t.id = mi_idx.movie_id AND t.id = mk.movie_id AND mk.movie_id = mi_idx.movie_id AND k.id = mk.keyword_id AND it.id = mi_idx.info_type_id AND it.info in ('death notes','color info','keywords','plot') AND mi_idx.info < '6.0'",
+ "join columns": ["t.id", "mi_idx.movie_id", "mk.keyword_id", "k.id", "mk.movie_id", "it.id", "mi_idx.info_type_id"],
+ "unary columns": ["mi_idx.info", "it.info"],
+ "join expressions": [{"left": "t.id", "right": "mi_idx.movie_id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.movie_id", "right": "mi_idx.movie_id"}, {"left": "k.id", "right": "mk.keyword_id"}, {"left": "it.id", "right": "mi_idx.info_type_id"}],
+ "left deep tree min cost": "0",
+ "left deep tree min order": "((((it join mi_idx) join k) join mk) join t)",
+ "bushy deep tree min cost": "0",
+ "bushy deep tree min order": "((((it join mi_idx) join k) join mk) join t)"
+}

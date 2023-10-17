@@ -1,0 +1,41 @@
+{
+ "name": "5 20",
+ "relations": [
+  {"name": "ct", "aliastable": "company_type", "basetable": "company_type", "cardinality": 4, "unfilteredCardinality": 4},
+  {"name": "it", "aliastable": "info_type", "basetable": "info_type", "cardinality": 13, "unfilteredCardinality": 113},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 79078, "unfilteredCardinality": 2609129},
+  {"name": "mi", "aliastable": "movie_info", "basetable": "movie_info", "cardinality": 14597606, "unfilteredCardinality": 14835720},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 2528312, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi"]},
+  {"relations": ["t", "mc"]},
+  {"relations": ["mc", "mi"]},
+  {"relations": ["ct", "mc"]},
+  {"relations": ["it", "mi"]}
+ ],
+ "sizes": [
+  {"relations": ["ct", "mc"], "cardinality": 79078},
+  {"relations": ["it", "mi"], "cardinality": 1292245},
+  {"relations": ["mc", "mi"], "cardinality": 2416651},
+  {"relations": ["mc", "t"], "cardinality": 79078},
+  {"relations": ["mi", "t"], "cardinality": 14597606},
+  {"relations": ["ct", "mc", "mi"], "cardinality": 2416651},
+  {"relations": ["ct", "mc", "t"], "cardinality": 79078},
+  {"relations": ["it", "mc", "mi"], "cardinality": 79037},
+  {"relations": ["it", "mi", "t"], "cardinality": 1292245},
+  {"relations": ["mc", "mi", "t"], "cardinality": 2416651},
+  {"relations": ["ct", "it", "mc", "mi"], "cardinality": 79037},
+  {"relations": ["ct", "mc", "mi", "t"], "cardinality": 2416651},
+  {"relations": ["it", "mc", "mi", "t"], "cardinality": 79037},
+  {"relations": ["ct", "it", "mc", "mi", "t"], "cardinality": 79037}
+ ],
+ "query": "SELECT MIN(t.title) AS typical_european_movie FROM company_type AS ct, info_type AS it, movie_companies AS mc, movie_info AS mi, title AS t WHERE t.id = mi.movie_id AND t.id = mc.movie_id AND mc.movie_id = mi.movie_id AND ct.id = mc.company_type_id AND it.id = mi.info_type_id AND (mc.note like '%China%' OR mc.note like '%UK%' OR mc.note like '%Mexico%') AND mi.info not in ('Serbo-Croatian','Spanish','Cantonese','Japanese','French','Greek','None','Zulu','Hebrew','Yiddish','Finnish','Korean') AND it.info in ('pictorial','LD video noise','mini biography','rentals','LD audio quality','agent address','LD number of chapter stops','article','LD video quality','color info','rating','where now','LD color rendition')",
+ "join columns": ["mi.movie_id", "t.id", "mi.info_type_id", "mc.movie_id", "it.id", "mc.company_type_id", "ct.id"],
+ "unary columns": ["mi.info", "mc.note", "it.info"],
+ "join expressions": [{"left": "t.id", "right": "mi.movie_id"}, {"left": "t.id", "right": "mc.movie_id"}, {"left": "mc.movie_id", "right": "mi.movie_id"}, {"left": "ct.id", "right": "mc.company_type_id"}, {"left": "it.id", "right": "mi.info_type_id"}],
+ "left deep tree min cost": "1265125",
+ "left deep tree min order": "((((it join mc) join mi) join ct) join t)",
+ "bushy deep tree min cost": "1265125",
+ "bushy deep tree min order": "((((it join mc) join mi) join ct) join t)"
+}

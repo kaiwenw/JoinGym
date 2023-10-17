@@ -1,0 +1,41 @@
+{
+ "name": "5 22",
+ "relations": [
+  {"name": "ct", "aliastable": "company_type", "basetable": "company_type", "cardinality": 3, "unfilteredCardinality": 4},
+  {"name": "it", "aliastable": "info_type", "basetable": "info_type", "cardinality": 96, "unfilteredCardinality": 113},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 2609129, "unfilteredCardinality": 2609129},
+  {"name": "mi", "aliastable": "movie_info", "basetable": "movie_info", "cardinality": 14782544, "unfilteredCardinality": 14835720},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 270399, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi"]},
+  {"relations": ["t", "mc"]},
+  {"relations": ["mc", "mi"]},
+  {"relations": ["ct", "mc"]},
+  {"relations": ["it", "mi"]}
+ ],
+ "sizes": [
+  {"relations": ["ct", "mc"], "cardinality": 2609129},
+  {"relations": ["it", "mi"], "cardinality": 13387387},
+  {"relations": ["mc", "mi"], "cardinality": 67244208},
+  {"relations": ["mc", "t"], "cardinality": 229941},
+  {"relations": ["mi", "t"], "cardinality": 1391540},
+  {"relations": ["ct", "mc", "mi"], "cardinality": 67244208},
+  {"relations": ["ct", "mc", "t"], "cardinality": 229941},
+  {"relations": ["it", "mc", "mi"], "cardinality": 63862531},
+  {"relations": ["it", "mi", "t"], "cardinality": 1258886},
+  {"relations": ["mc", "mi", "t"], "cardinality": 5840399},
+  {"relations": ["ct", "it", "mc", "mi"], "cardinality": 63862531},
+  {"relations": ["ct", "mc", "mi", "t"], "cardinality": 5840399},
+  {"relations": ["it", "mc", "mi", "t"], "cardinality": 5584878},
+  {"relations": ["ct", "it", "mc", "mi", "t"], "cardinality": 5584878}
+ ],
+ "query": "SELECT MIN(t.title) AS typical_european_movie FROM company_type AS ct, info_type AS it, movie_companies AS mc, movie_info AS mi, title AS t WHERE t.id = mi.movie_id AND t.id = mc.movie_id AND mc.movie_id = mi.movie_id AND ct.id = mc.company_type_id AND it.id = mi.info_type_id AND ct.kind in ('distributors','special effects companies','production companies') AND it.info not in ('LD review','countries','LD category','LD quality of source','LD quality program','novel','LD audio noise','bottom 10 rank','LD production country','adaption','screenplay-teleplay','agent address','LD contrast','crazy credits','interviews','LD color rendition','essays') AND mi.info not in ('Polish','Latin','Italian','Danish','Inuktitut','Irish Gaelic','Gujarati','Norwegian','Chinese','Slovenian','Tamil','Chechen') AND t.production_year > 2008 AND t.production_year < 2011",
+ "join columns": ["mi.movie_id", "t.id", "mi.info_type_id", "mc.movie_id", "it.id", "mc.company_type_id", "ct.id"],
+ "unary columns": ["ct.kind", "t.production_year", "mi.info", "it.info"],
+ "join expressions": [{"left": "t.id", "right": "mi.movie_id"}, {"left": "t.id", "right": "mc.movie_id"}, {"left": "mc.movie_id", "right": "mi.movie_id"}, {"left": "ct.id", "right": "mc.company_type_id"}, {"left": "it.id", "right": "mi.info_type_id"}],
+ "left deep tree min cost": "11885159",
+ "left deep tree min order": "((((mc join t) join ct) join mi) join it)",
+ "bushy deep tree min cost": "11885159",
+ "bushy deep tree min order": "((((mc join t) join ct) join mi) join it)"
+}

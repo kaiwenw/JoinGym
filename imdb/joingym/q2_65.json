@@ -1,0 +1,41 @@
+{
+ "name": "2 65",
+ "relations": [
+  {"name": "cn", "aliastable": "company_name", "basetable": "company_name", "cardinality": 234996, "unfilteredCardinality": 234997},
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 134170, "unfilteredCardinality": 134170},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 74656, "unfilteredCardinality": 2609129},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 661924, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["cn", "mc"]},
+  {"relations": ["mc", "t"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "k"]},
+  {"relations": ["mc", "mk"]}
+ ],
+ "sizes": [
+  {"relations": ["cn", "mc"], "cardinality": 74656},
+  {"relations": ["k", "mk"], "cardinality": 4523930},
+  {"relations": ["mc", "mk"], "cardinality": 1226192},
+  {"relations": ["mc", "t"], "cardinality": 15811},
+  {"relations": ["mk", "t"], "cardinality": 683738},
+  {"relations": ["cn", "mc", "mk"], "cardinality": 1226192},
+  {"relations": ["cn", "mc", "t"], "cardinality": 15811},
+  {"relations": ["k", "mc", "mk"], "cardinality": 1226192},
+  {"relations": ["k", "mk", "t"], "cardinality": 683738},
+  {"relations": ["mc", "mk", "t"], "cardinality": 227951},
+  {"relations": ["cn", "k", "mc", "mk"], "cardinality": 1226192},
+  {"relations": ["cn", "mc", "mk", "t"], "cardinality": 227951},
+  {"relations": ["k", "mc", "mk", "t"], "cardinality": 227951},
+  {"relations": ["cn", "k", "mc", "mk", "t"], "cardinality": 227951}
+ ],
+ "query": "SELECT MIN(t.title) AS movie_title FROM company_name AS cn, keyword AS k, movie_companies AS mc, movie_keyword AS mk, title AS t WHERE cn.id = mc.company_id AND mc.movie_id = t.id AND t.id = mk.movie_id AND mk.keyword_id = k.id AND mc.movie_id = mk.movie_id AND cn.name not like '%Blumhouse Productions%' AND t.title not like '%wind%' AND t.title not like '%hammer%' AND t.production_year > 2008 AND (mc.note like '%India%' OR mc.note like '%Japan%' OR mc.note like '%Italy%')",
+ "join columns": ["mc.company_id", "cn.id", "mc.movie_id", "k.id", "t.id", "mk.movie_id", "mk.keyword_id"],
+ "unary columns": ["t.title", "mc.note", "t.production_year", "cn.name"],
+ "join expressions": [{"left": "cn.id", "right": "mc.company_id"}, {"left": "mc.movie_id", "right": "t.id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.keyword_id", "right": "k.id"}, {"left": "mc.movie_id", "right": "mk.movie_id"}],
+ "left deep tree min cost": "487524",
+ "left deep tree min order": "((((mc join t) join cn) join mk) join k)",
+ "bushy deep tree min cost": "487524",
+ "bushy deep tree min order": "((((mc join t) join cn) join mk) join k)"
+}

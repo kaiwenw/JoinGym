@@ -1,0 +1,41 @@
+{
+ "name": "5 29",
+ "relations": [
+  {"name": "ct", "aliastable": "company_type", "basetable": "company_type", "cardinality": 2, "unfilteredCardinality": 4},
+  {"name": "it", "aliastable": "info_type", "basetable": "info_type", "cardinality": 113, "unfilteredCardinality": 113},
+  {"name": "mc", "aliastable": "movie_companies", "basetable": "movie_companies", "cardinality": 2609129, "unfilteredCardinality": 2609129},
+  {"name": "mi", "aliastable": "movie_info", "basetable": "movie_info", "cardinality": 24074, "unfilteredCardinality": 14835720},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 2528312, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi"]},
+  {"relations": ["t", "mc"]},
+  {"relations": ["mc", "mi"]},
+  {"relations": ["ct", "mc"]},
+  {"relations": ["it", "mi"]}
+ ],
+ "sizes": [
+  {"relations": ["ct", "mc"], "cardinality": 1334883},
+  {"relations": ["it", "mi"], "cardinality": 24074},
+  {"relations": ["mc", "mi"], "cardinality": 46671},
+  {"relations": ["mc", "t"], "cardinality": 2609129},
+  {"relations": ["mi", "t"], "cardinality": 24074},
+  {"relations": ["ct", "mc", "mi"], "cardinality": 25553},
+  {"relations": ["ct", "mc", "t"], "cardinality": 1334883},
+  {"relations": ["it", "mc", "mi"], "cardinality": 46671},
+  {"relations": ["it", "mi", "t"], "cardinality": 24074},
+  {"relations": ["mc", "mi", "t"], "cardinality": 46671},
+  {"relations": ["ct", "it", "mc", "mi"], "cardinality": 25553},
+  {"relations": ["ct", "mc", "mi", "t"], "cardinality": 25553},
+  {"relations": ["it", "mc", "mi", "t"], "cardinality": 46671},
+  {"relations": ["ct", "it", "mc", "mi", "t"], "cardinality": 25553}
+ ],
+ "query": "SELECT MIN(t.title) AS typical_european_movie FROM company_type AS ct, info_type AS it, movie_companies AS mc, movie_info AS mi, title AS t WHERE t.id = mi.movie_id AND t.id = mc.movie_id AND mc.movie_id = mi.movie_id AND ct.id = mc.company_type_id AND it.id = mi.info_type_id AND mi.info in ('Finnish','Persian','Georgian','Albanian','Tamil','Zulu','Swedish','Brazilian Sign Language') AND ct.kind in ('production companies','special effects companies')",
+ "join columns": ["mi.movie_id", "t.id", "mi.info_type_id", "mc.movie_id", "it.id", "mc.company_type_id", "ct.id"],
+ "unary columns": ["mi.info", "ct.kind"],
+ "join expressions": [{"left": "t.id", "right": "mi.movie_id"}, {"left": "t.id", "right": "mc.movie_id"}, {"left": "mc.movie_id", "right": "mi.movie_id"}, {"left": "ct.id", "right": "mc.company_type_id"}, {"left": "it.id", "right": "mi.info_type_id"}],
+ "left deep tree min cost": "120372",
+ "left deep tree min order": "((((it join mi) join t) join mc) join ct)",
+ "bushy deep tree min cost": "120372",
+ "bushy deep tree min order": "((((it join mi) join t) join mc) join ct)"
+}

@@ -1,0 +1,33 @@
+{
+ "name": "3 84",
+ "relations": [
+  {"name": "k", "aliastable": "keyword", "basetable": "keyword", "cardinality": 133581, "unfilteredCardinality": 134170},
+  {"name": "mi", "aliastable": "movie_info", "basetable": "movie_info", "cardinality": 14800869, "unfilteredCardinality": 14835720},
+  {"name": "mk", "aliastable": "movie_keyword", "basetable": "movie_keyword", "cardinality": 4523930, "unfilteredCardinality": 4523930},
+  {"name": "t", "aliastable": "title", "basetable": "title", "cardinality": 2528312, "unfilteredCardinality": 2528312}
+ ],
+ "joins": [
+  {"relations": ["t", "mi"]},
+  {"relations": ["t", "mk"]},
+  {"relations": ["mk", "mi"]},
+  {"relations": ["k", "mk"]}
+ ],
+ "sizes": [
+  {"relations": ["k", "mk"], "cardinality": 4486005},
+  {"relations": ["mi", "mk"], "cardinality": 235325056},
+  {"relations": ["mi", "t"], "cardinality": 14800869},
+  {"relations": ["mk", "t"], "cardinality": 4523930},
+  {"relations": ["k", "mi", "mk"], "cardinality": 233156245},
+  {"relations": ["k", "mk", "t"], "cardinality": 4486005},
+  {"relations": ["mi", "mk", "t"], "cardinality": 235325056},
+  {"relations": ["k", "mi", "mk", "t"], "cardinality": 233156245}
+ ],
+ "query": "SELECT MIN(t.title) AS movie_title FROM keyword AS k, movie_info AS mi, movie_keyword AS mk, title AS t WHERE t.id = mi.movie_id AND t.id = mk.movie_id AND mk.movie_id = mi.movie_id AND k.id = mk.keyword_id AND k.keyword not like '%fight%' AND k.keyword not like '%destiny%' AND k.keyword not like '%dreams%' AND k.keyword not like '%revolution%' AND k.keyword not like '%detective%' AND mi.info not in ('Irish Gaelic','Bosnian','Dari','Bulgarian','Hungarian','Estonian','Dutch','Icelandic','Brazilian Sign Language','Swedish')",
+ "join columns": ["mi.movie_id", "t.id", "mk.keyword_id", "k.id", "mk.movie_id"],
+ "unary columns": ["mi.info", "k.keyword"],
+ "join expressions": [{"left": "t.id", "right": "mi.movie_id"}, {"left": "t.id", "right": "mk.movie_id"}, {"left": "mk.movie_id", "right": "mi.movie_id"}, {"left": "k.id", "right": "mk.keyword_id"}],
+ "left deep tree min cost": "242128255",
+ "left deep tree min order": "(((k join mk) join t) join mi)",
+ "bushy deep tree min cost": "242128255",
+ "bushy deep tree min order": "(((k join mk) join t) join mi)"
+}
