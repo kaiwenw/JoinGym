@@ -57,14 +57,16 @@ By default, these scripts will run JoinGym with our whole dataset of $3300$ quer
 
 
 ### Paper and Citation
-To cite this work, please use the following.
-<br>
-Wang*, K., Wang*, J., Li, Y., Kallus, N., Trummer, I., & Sun, W. (2023). JoinGym: An Efficient Query Optimization Environment for Reinforcement Learning. arXiv preprint arXiv:2307.11704.
+To cite this work, please use the following BibTex.
+<!-- <br>
+Wang*, K., Wang*, J., Li, Y., Kallus, N., Trummer, I., & Sun, W. (2023). JoinGym: An Efficient Query Optimization Environment for Reinforcement Learning. arXiv preprint arXiv:2307.11704. -->
 ```
-@article{wang2023joingym,
-  title={JoinGym: An Efficient Query Optimization Environment for Reinforcement Learning},
+@inproceedings{
+  wang2024joingym,
+  title={JoinGym: An Efficient Join Order Selection Environment},
   author={Wang$^\star$, Kaiwen and Wang$^\star$, Junxiong and Li, Yueying and Kallus, Nathan and Trummer, Immanuel and Sun, Wen},
-  journal={arXiv preprint arXiv:2307.11704},
-  year={2023}
+  booktitle={Reinforcement Learning Conference},
+  year={2024},
+  url={https://openreview.net/forum?id=dQahvyT8p4}
 }
 ```
