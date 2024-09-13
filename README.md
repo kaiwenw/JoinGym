@@ -56,8 +56,9 @@ python test_sac.py --enable-bushy
 By default, these scripts will run JoinGym with our whole dataset of $3300$ queries in `imdb/joingym`. You can modify the environment initialization to use a subset of queries, or to use queries from the Join Order Benchmark (JOB). Data for the JOB is stored in `imdb/job`.
 
 
-### Paper and Citation
-To cite this work, please use the following BibTex.
+### Citation
+If you find this project inspiring or use our repository, kindly please cite
+
 ```
 @article{wang2024joingym,
     title={{JoinGym}: {A}n Efficient Join Order Selection Environment},
